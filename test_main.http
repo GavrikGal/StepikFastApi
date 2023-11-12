@@ -1,0 +1,21 @@
+# curl -X 'POST'
+#  'http://localhost:8000/calculate?num1=11&num2=5'
+#  -H 'accept: application/json'
+#  -d ''
+POST http://localhost:8000/calculate?num1=11&num2=5
+accept: application/json
+Content-Type: application/x-www-form-urlencoded
+
+###
+
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+
+###
