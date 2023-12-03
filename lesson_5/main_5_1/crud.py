@@ -18,7 +18,6 @@ def create_todo(db: Session, todo: schemas.ToDoCreate):
 def update_todo(db: Session, todo: schemas.ToDoUpdate):
     db_todo = get_todo(db=db, todo_id=todo.id)
     db_todo.completed = todo.completed
-    # db_todo.update({'completed': todo.completed})
     db.commit()
     db.refresh(db_todo)
     return db_todo
