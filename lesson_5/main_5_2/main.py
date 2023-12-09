@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import crud, schemas
@@ -27,24 +28,27 @@ async def create_todo(todo: schemas.ToDoCreate, db: AsyncSession = Depends(get_d
 
 @app.get('/todo/{todo_id}', response_model=schemas.ToDo)
 async def read_todo(todo_id: int, db: AsyncSession = Depends(get_db)):
-    db_todo = await crud.get_todo(db=db, todo_id=todo_id)
-    if db_todo is None:
+    try:
+        db_todo = await crud.get_todo(db=db, todo_id=todo_id)
+    except NoResultFound:
         raise HTTPException(status_code=404, detail='ToDo not found')
     return db_todo
 
 
 @app.put('/todo/', response_model=schemas.ToDo)
 async def update_todo(todo: schemas.ToDoUpdate, db: AsyncSession = Depends(get_db)):
-    db_todo = await crud.get_todo(db=db, todo_id=todo.id)
-    if db_todo is None:
+    try:
+        db_todo = await crud.get_todo(db=db, todo_id=todo.id)
+    except NoResultFound:
         raise HTTPException(status_code=404, detail='ToDo not found')
     return await crud.update_todo(db=db, todo=todo, db_todo=db_todo)
 
 
 @app.delete('/todo/{todo_id}')
 async def delete_todo(todo_id: int, db: AsyncSession = Depends(get_db)):
-    db_todo = await crud.get_todo(db=db, todo_id=todo_id)
-    if db_todo is None:
+    try:
+        db_todo = await crud.get_todo(db=db, todo_id=todo_id)
+    except NoResultFound:
         raise HTTPException(status_code=404, detail='ToDo not found')
     await crud.delete_todo(db=db, todo=db_todo)
     return {'message': f'ToDo with id:{todo_id} has been deleted'}
