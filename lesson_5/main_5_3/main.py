@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from . import crud, schemas
 from .database import SessionLocal, create_all
 
-""" В уроке асинхронное подключение к PostgresSQL """
+""" В уроке асинхронное подключение к PostgresSQL с миграциями через Alembic """
 
 app = FastAPI()
 
